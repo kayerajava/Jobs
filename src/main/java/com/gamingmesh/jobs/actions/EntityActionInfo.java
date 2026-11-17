@@ -23,7 +23,6 @@ import org.bukkit.entity.Entity;
 import com.gamingmesh.jobs.container.ActionType;
 import com.gamingmesh.jobs.container.BaseActionInfo;
 import com.gamingmesh.jobs.listeners.JobsPaymentListener;
-import com.gamingmesh.jobs.listeners.Paper26_3_Listeners;
 import com.gamingmesh.jobs.stuff.Util;
 
 import net.Zrips.CMILib.Entities.CMIEntityType;
@@ -45,8 +44,6 @@ public class EntityActionInfo extends BaseActionInfo {
     public String getNameWithSub() {
         CMIEntityType ctype = CMIEntityType.get(entity);
         switch (ctype) {
-        case CUSHION:
-            return getName() + ":" + Paper26_3_Listeners.getCushionColor(entity);
         case SHEEP:
             return getName() + ":" + JobsPaymentListener.getSheepColor(entity);
         default:

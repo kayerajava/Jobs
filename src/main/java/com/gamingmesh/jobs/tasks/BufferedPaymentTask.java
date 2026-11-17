@@ -47,7 +47,7 @@ public class BufferedPaymentTask implements Runnable {
 	    } else {
 		economy.depositPlayer(payment.getOfflinePlayer(), money);
 	    }
-	} else if (!economy.withdrawPlayer(payment.getOfflinePlayer(), -money)) {
+	} else if (money < 0 && !economy.withdrawPlayer(payment.getOfflinePlayer(), -money)) {
 	    bufferedEconomy.pay(payment);
 	}
 

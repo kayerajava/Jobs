@@ -475,16 +475,9 @@ public final class JobsPaymentListener implements Listener {
 
         BlockActionInfo bInfo = new BlockActionInfo(block, ActionType.BREAK);
 
-        FastPayment fp = Jobs.FASTPAYMENT.get(player.getUniqueId());
-        if (fp != null) {
-            if (fp.getTime() > System.currentTimeMillis() && (fp.getInfo().getName().equalsIgnoreCase(bInfo.getName()) ||
-                    fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub()))) {
-                Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob(), block, null, null);
-                return;
-            }
-
-            Jobs.FASTPAYMENT.remove(player.getUniqueId());
-        }
+        // The FastPayment shortcut that lived here re-paid a same-type break within 45ms without running
+        // the place-and-break, silk-touch or crop-age checks; a nuker paid every block in the tick.
+        // Every break now goes through Jobs.action.
 
         if (!payForItemDurabilityLoss(player))
             return;
