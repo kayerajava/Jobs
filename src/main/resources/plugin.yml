@@ -28,6 +28,7 @@ softdepend: [
 commands:
   jobs:
     description: Jobs
+    aliases: [meslek]
 permissions:
   jobs.*:
     description: Grants access to all Jobs commands

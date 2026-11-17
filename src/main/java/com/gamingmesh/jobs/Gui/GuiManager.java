@@ -367,7 +367,7 @@ public class GuiManager {
 
         final List<actionList> actionList = new ArrayList<>();
 
-        int chunkSize = 10;
+        int chunkSize = 1; // Arkeil: one item per block/mob, its own icon
 
         for (ActionType actionType : ActionType.values()) {
             List<JobInfo> info = job.getJobInfo(actionType);
@@ -413,15 +413,15 @@ public class GuiManager {
                 break;
 
             List<String> lore = new ArrayList<>();
-            lore.add(Jobs.getLanguage().getMessage("command.info.output." + action.getType().getName().toLowerCase() + ".info"));
-            ItemStack guiItem = action.getType().getGuiItems().isEmpty() ? null : action.getType().getGuiItems().get(i % action.getType().getGuiItems().size());
+            ItemStack guiItem = null;
+            String itemName = null;
             i++;
 
             for (int z = 0; z < action.getInfo().size(); z++) {
 
                 JobInfo jInfo = action.getInfo().get(z);
 
-                if (guiItem == null) {
+                {
                     try {
                         CMIItemStack item = CMILib.getInstance().getItemManager().getItem(jInfo.getName());
                         if (item != null && item.getCMIType().isValidAsItemStack())
@@ -456,26 +456,27 @@ public class GuiManager {
                 if (income == 0D && points == 0D && xp == 0D)
                     continue;
 
-                String itemName = jInfo.getRealisticName();
-                String val = "";
+                itemName = jInfo.getRealisticName();
 
+                // Arkeil: block/mob is the item name, each currency its own lore line
                 if (income != 0.0)
-                    val += Jobs.getLanguage().getMessage("command.info.help.money", "%money%", incomeColor + CurrencyType.MONEY.format(income));
+                    lore.add(Jobs.getLanguage().getMessage("command.info.help.money", "%money%", incomeColor + CurrencyType.MONEY.format(income)));
 
                 if (points != 0.0)
-                    val += Jobs.getLanguage().getMessage("command.info.help.points", "%points%", pointsColor + CurrencyType.POINTS.format(points));
+                    lore.add(Jobs.getLanguage().getMessage("command.info.help.points", "%points%", pointsColor + CurrencyType.POINTS.format(points)));
 
                 if (xp != 0.0)
-                    val += Jobs.getLanguage().getMessage("command.info.help.exp", "%exp%", xpColor + CurrencyType.EXP.format(xp));
-
-                lore.add(Jobs.getLanguage().getMessage("command.info.help.material", "%material%", itemName) + val);
+                    lore.add(Jobs.getLanguage().getMessage("command.info.help.exp", "%exp%", xpColor + CurrencyType.EXP.format(xp)));
             }
+
+            if (lore.isEmpty())
+                continue;
 
             if (guiItem == null)
                 guiItem = job.getGuiItem().clone();
 
             ItemMeta meta = guiItem.getItemMeta();
-            meta.setDisplayName(Jobs.getLanguage().getMessage("command.info.help.jobName", job));
+            meta.setDisplayName(Jobs.getLanguage().getMessage("command.info.help.material", "%material%", itemName));
             meta.setLore(lore);
             guiItem.setItemMeta(meta);
             items.add(guiItem.clone());
