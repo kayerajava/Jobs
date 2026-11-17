@@ -513,9 +513,8 @@ public class GuiManager {
 
                 gui.addButton(button);
             } else if (Jobs.getPlayerManager().getJobsLimit(jPlayer, (short) jPlayer.getJobProgression().size())) {
-                gui.addButton(generateJoinButton(player, job, ((rows - 1) * 9) + 3));
+                // ponytail: one join button in the middle, the menu texture draws a single plank there
                 gui.addButton(generateJoinButton(player, job, ((rows - 1) * 9) + 4));
-                gui.addButton(generateJoinButton(player, job, ((rows - 1) * 9) + 5));
             }
         }
 
