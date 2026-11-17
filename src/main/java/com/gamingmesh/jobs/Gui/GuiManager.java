@@ -181,6 +181,13 @@ public class GuiManager {
             Job job = jobsList.get(z);
             List<String> lore = new ArrayList<>();
 
+            // Arkeil: description (badge + text) first, then the stats block
+            if (job.getDescription().isEmpty()) {
+                lore.addAll(job.getFullDescription());
+            } else
+                lore.addAll(Arrays.asList(job.getDescription().split("/n|\\n")));
+            lore.add("");
+
             for (JobProgression onePJob : jPlayer.getJobProgression()) {
                 if (onePJob.getJob().getName().equalsIgnoreCase(job.getName())) {
                     lore.add(Jobs.getLanguage().getMessage("command.info.gui.working"));
@@ -204,18 +211,12 @@ public class GuiManager {
                     lore.add(Jobs.getLanguage().getMessage("command.browse.output.bonus", "[amount]", (int) (bonus * 100)));
             }
 
-            if (job.getDescription().isEmpty()) {
-                lore.addAll(job.getFullDescription());
-            } else
-                lore.addAll(Arrays.asList(job.getDescription().split("/n|\\n")));
-
             if (job.getMaxSlots() != null) {
                 int usedSlots = Jobs.getUsedSlots(job);
                 lore.add(Jobs.getLanguage().getMessage("command.info.gui.leftSlots") + ((job.getMaxSlots() - usedSlots) > 0 ? (job.getMaxSlots() - usedSlots) : 0));
             }
 
             if (Jobs.getGCManager().ShowActionNames) {
-                lore.add("");
                 lore.add(Jobs.getLanguage().getMessage("command.info.gui.actions"));
 
                 for (ActionType actionType : ActionType.values()) {
